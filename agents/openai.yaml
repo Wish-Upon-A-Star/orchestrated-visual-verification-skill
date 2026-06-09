@@ -1,0 +1,7 @@
+interface:
+  display_name: "Orchestrated Visual Verification"
+  short_description: "Rigorous orchestration plus browser and visual QA gates."
+  default_prompt: "Use $orchestrated-visual-verification to plan, implement, visually verify, review, and report this work."
+
+policy:
+  allow_implicit_invocation: true

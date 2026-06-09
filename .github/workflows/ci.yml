@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile scripts
+        run: |
+          python -m py_compile \
+            scripts/audit_ovv_report.py \
+            scripts/record_ovv_learning.py \
+            scripts/summarize_ovv_learnings.py
+
+      - name: Strong report passes
+        run: python scripts/audit_ovv_report.py examples/strong-report.md
+
+      - name: Weak report fails and records learnings
+        run: |
+          set +e
+          python scripts/audit_ovv_report.py examples/weak-report.md --record-failures --learning-log tmp/learnings.jsonl
+          status=$?
+          set -e
+          test "$status" -ne 0
+          python scripts/audit_ovv_report.py examples/weak-report.md --record-failures --learning-log tmp/learnings.jsonl || true
+          python scripts/summarize_ovv_learnings.py --log tmp/learnings.jsonl --min-count 2
