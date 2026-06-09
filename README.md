@@ -1,58 +1,58 @@
 # Orchestrated Visual Verification (OVV)
 
-OVV is a Codex skill for work that should not end at "implemented." It turns broad coding, UI, game, workflow, or agent-system tasks into an evidence-driven loop with orchestration decisions, visual verification, repeated review, measurable audit gates, and a self-improvement log.
+OVV는 Codex가 작업을 “구현 완료”에서 끝내지 않고, 요구사항 추출, 필요시 오케스트레이션, 시각 검증, 반복 리뷰, 증거 기반 완료 판단, 자기 개선 기록까지 수행하도록 만드는 Codex 스킬입니다.
 
-Short name: **OVV**
+짧은 이름: **OVV**
 
-Skill invocation:
+명시 호출:
 
 ```text
 $orchestrated-visual-verification
 ```
 
-Natural-language invocation:
+자연어 호출:
 
 ```text
-Use OVV to plan, implement, visually verify, review, and report this work.
+OVV 써서 이 작업을 계획, 구현, 시각 검증, 리뷰, 최종 보고까지 해줘.
 ```
 
-## What This Skill Does
+## 이 스킬이 하는 일
 
-OVV makes Codex answer five questions before claiming completion:
+OVV는 Codex가 완료를 주장하기 전에 다음 질문에 답하게 만듭니다.
 
-1. What exactly was required?
-2. Was solo execution enough, or was orchestration with workers/validators needed?
-3. What evidence proves each requirement?
-4. If the work is user-visible, what browser, screenshot, viewport, or rendered evidence proves the UI actually looks right?
-5. What review rounds happened, what issues were found, and what was rechecked after fixes?
+1. 정확히 무엇이 요구되었는가?
+2. 혼자 처리해도 되는가, 아니면 worker/validator를 나누는 오케스트레이션이 필요한가?
+3. 각 요구사항은 어떤 증거로 검증되는가?
+4. UI나 사용자에게 보이는 작업이라면 브라우저, 스크린샷, viewport, 렌더링 결과 같은 시각 증거가 있는가?
+5. 실제 리뷰 라운드는 몇 번 수행되었고, 무엇을 발견했으며, 수정 후 무엇을 다시 확인했는가?
 
-The skill includes:
+포함된 구성요소:
 
-- `SKILL.md`: the Codex skill instructions.
-- `references/feasible-upgrades.md`: 125 practical workflow and verification improvements.
-- `references/eval-fixtures.md`: weak/strong report fixtures for testing the skill.
-- `scripts/audit_ovv_report.py`: scores plans or final reports for evidence completeness.
-- `scripts/record_ovv_learning.py`: records real misses into a JSONL learning log.
-- `scripts/summarize_ovv_learnings.py`: summarizes repeated misses and proposes skill patch candidates.
-- `agents/openai.yaml`: UI metadata for Codex skill lists.
+- `SKILL.md`: Codex 스킬 본문.
+- `references/feasible-upgrades.md`: 실현 가능한 워크플로/검증 개선책 125개.
+- `references/eval-fixtures.md`: 약한 보고서/강한 보고서 fixture.
+- `scripts/audit_ovv_report.py`: 계획서나 최종 보고서의 증거 완성도를 점수화.
+- `scripts/record_ovv_learning.py`: 실제 놓친 점을 JSONL learning log에 기록.
+- `scripts/summarize_ovv_learnings.py`: 반복 실패를 집계하고 스킬 패치 후보를 제안.
+- `agents/openai.yaml`: Codex 스킬 UI 메타데이터.
 
-## Why It Exists
+## 왜 필요한가
 
-Many agent workflows fail in the same ways:
+에이전트 작업은 자주 같은 방식으로 실패합니다.
 
-- requirements are vague or incomplete,
-- "done" is claimed without evidence,
-- UI work is checked only by code or tests, not by screenshots/browser state,
-- review rounds are summarized but not actually performed,
-- recurring mistakes are forgotten instead of being fed back into the workflow.
+- 요구사항이 흐릿하거나 빠짐.
+- “완료”라고 말하지만 증거가 없음.
+- UI 작업을 코드나 테스트만 보고 끝냄.
+- 리뷰 라운드를 실제로 수행하지 않고 요약만 함.
+- 반복되는 실수를 기록하지 않아 다음 작업에서도 같은 문제가 재발함.
 
-OVV is designed to make those weak completions fail early. It is not a replacement for tests, Playwright, manual review, or product judgment. It is a forcing function that makes missing evidence visible.
+OVV는 이런 약한 완료를 빨리 실패시키기 위한 스킬입니다. 테스트, Playwright, 수동 리뷰, 제품 판단을 대체하지 않습니다. 대신 “완료 주장에 필요한 증거가 빠져 있다”는 사실을 드러내는 강제 장치입니다.
 
-## Installation
+## 설치법
 
 ### Windows PowerShell
 
-Clone the repo, then copy it into your Codex skills directory:
+레포를 clone한 뒤 Codex skills 디렉터리에 복사합니다.
 
 ```powershell
 git clone https://github.com/Wish-Upon-A-Star/orchestrated-visual-verification-skill.git
@@ -60,7 +60,7 @@ New-Item -ItemType Directory -Force "$env:USERPROFILE\.codex\skills" | Out-Null
 Copy-Item -Recurse -Force orchestrated-visual-verification-skill "$env:USERPROFILE\.codex\skills\orchestrated-visual-verification"
 ```
 
-Restart Codex after installing so the skill list refreshes.
+설치 후 Codex를 재시작하면 스킬 목록이 갱신됩니다.
 
 ### macOS / Linux
 
@@ -70,125 +70,125 @@ mkdir -p "$HOME/.codex/skills"
 cp -R orchestrated-visual-verification-skill "$HOME/.codex/skills/orchestrated-visual-verification"
 ```
 
-Restart Codex after installing so the skill list refreshes.
+설치 후 Codex를 재시작하면 스킬 목록이 갱신됩니다.
 
-## Basic Usage
+## 기본 사용법
 
-Use the skill explicitly:
+스킬을 직접 호출:
 
 ```text
 $orchestrated-visual-verification
-Build this feature and verify it with browser screenshots and review rounds.
+이 기능을 구현하고 브라우저 스크린샷과 리뷰 라운드까지 포함해서 검증해줘.
 ```
 
-Or use the short name:
+짧은 이름으로 호출:
 
 ```text
 OVV 써서 이 작업을 구현, 시각 검증, 리뷰 라운드까지 끝내줘.
 ```
 
-For a report-only audit:
+최종 보고서만 audit:
 
 ```bash
 python ~/.codex/skills/orchestrated-visual-verification/scripts/audit_ovv_report.py final-report.md
 ```
 
-On Windows:
+Windows:
 
 ```powershell
 python "$env:USERPROFILE\.codex\skills\orchestrated-visual-verification\scripts\audit_ovv_report.py" final-report.md
 ```
 
-## Audit Script
+## Audit 스크립트
 
-`audit_ovv_report.py` checks whether a plan or final report contains the evidence OVV expects.
+`audit_ovv_report.py`는 계획서나 최종 보고서가 OVV가 요구하는 증거를 포함하는지 검사합니다.
 
-It scores these categories:
+점수화 항목:
 
-- requirements,
-- evidence,
-- orchestration decision,
-- visual/browser evidence,
-- review rounds,
-- issue/fix/recheck loop,
-- regression checks,
-- limitations,
-- usage instructions,
-- vague completion anti-patterns.
+- 요구사항,
+- 증거,
+- 오케스트레이션 판단,
+- 시각/브라우저 증거,
+- 리뷰 라운드,
+- 이슈/수정/recheck 루프,
+- 회귀 확인,
+- 남은 제한사항,
+- 사용법,
+- 근거 없는 완료 주장 anti-pattern.
 
-Run:
+실행:
 
 ```bash
 python scripts/audit_ovv_report.py final-report.md
 ```
 
-JSON output:
+JSON 출력:
 
 ```bash
 python scripts/audit_ovv_report.py final-report.md --json
 ```
 
-Record failures into the learning log:
+audit 실패를 learning log에 자동 기록:
 
 ```bash
 python scripts/audit_ovv_report.py final-report.md --record-failures
 ```
 
-Use a custom learning log:
+learning log 경로 지정:
 
 ```bash
 python scripts/audit_ovv_report.py final-report.md --record-failures --learning-log memory/ovv_skill_learnings.jsonl
 ```
 
-Important: passing the audit does not prove the underlying product is correct. It proves that the report contains the expected evidence categories.
+중요: audit 통과가 실제 제품의 정확성을 증명하지는 않습니다. audit은 보고서가 필요한 증거 범주를 갖추었는지 확인합니다.
 
-## Self-Improvement Loop
+## 자기 개선 루프
 
-OVV is designed to improve from real misses:
+OVV는 실제 놓친 점에서 개선되도록 설계되어 있습니다.
 
-1. Run the audit.
-2. Fix the current artifact if the audit fails.
-3. Record failures automatically with `--record-failures`.
-4. Summarize repeated failures.
-5. Convert repeated failure categories into targeted skill patches or new fixtures.
-6. Re-run the fixtures after changing the skill.
+1. audit을 실행합니다.
+2. audit이 실패하면 현재 산출물을 먼저 고칩니다.
+3. `--record-failures`로 실패 범주를 자동 기록합니다.
+4. 반복 실패를 요약합니다.
+5. 반복되는 실패 범주를 스킬 규칙, audit check, fixture 개선 후보로 승격합니다.
+6. 스킬을 고친 뒤 fixture를 다시 실행합니다.
 
-Summarize the learning log:
+learning log 요약:
 
 ```bash
 python scripts/summarize_ovv_learnings.py --log memory/ovv_skill_learnings.jsonl --min-count 2
 ```
 
-Example output:
+예시 출력:
 
 ```text
 ## Patch Candidates
-- `visual_browser` (3): Add or tighten a hard gate for browser, screenshot, viewport, or rendered artifact evidence on user-visible work.
-- `evidence` (2): Strengthen the completion audit to require requirement-to-evidence mapping before final signoff.
+- `visual_browser` (3): 사용자에게 보이는 작업에는 브라우저, 스크린샷, viewport, 렌더링 증거를 더 강하게 요구.
+- `evidence` (2): 최종 signoff 전에 요구사항별 증거 매핑을 더 강하게 요구.
 ```
 
-Manual learning record:
+수동 learning 기록:
 
 ```bash
 python scripts/record_ovv_learning.py \
   --task "settings panel" \
   --failure visual_browser \
-  --lesson "UI signoff needs screenshot evidence" \
-  --resolution "Added desktop and mobile screenshot checks"
+  --lesson "UI signoff에는 스크린샷 증거가 필요함" \
+  --resolution "desktop/mobile screenshot check를 추가함"
 ```
 
-## Verification Fixtures
+## 검증 Fixture
 
-The repository includes fixtures in `references/eval-fixtures.md`.
+`references/eval-fixtures.md`에 검증 fixture가 들어 있습니다.
 
-Expected behavior:
+기대 동작:
 
-- weak report: FAIL,
-- strong report: PASS,
-- UI report without visual evidence: FAIL,
-- repeated weak failures: patch candidates generated.
+- 약한 보고서: FAIL
+- 강한 보고서: PASS
+- UI 작업인데 시각 증거가 없는 보고서: FAIL
+- 약한 실패가 반복됨: patch candidates 생성
 
-Quick local smoke test:
+빠른 로컬 smoke test:
 
 ```bash
 mkdir -p tmp
@@ -198,27 +198,27 @@ python scripts/audit_ovv_report.py tmp/weak.md --record-failures --learning-log 
 python scripts/summarize_ovv_learnings.py --log tmp/learnings.jsonl --min-count 2
 ```
 
-## When To Use OVV
+## 언제 OVV를 쓰면 좋은가
 
-Use OVV for:
+OVV가 적합한 작업:
 
-- UI/frontend work that needs browser or screenshot verification,
-- game UI or visual state work,
-- multi-file coding tasks with regression risk,
-- tasks requiring exact review rounds,
-- agent prompt or workflow design,
-- work where completion must be evidence-backed,
-- tasks that may need orchestration but should not use it blindly.
+- 브라우저나 스크린샷 검증이 필요한 UI/frontend 작업,
+- 게임 UI나 시각 상태 작업,
+- 회귀 위험이 있는 다중 파일 코딩 작업,
+- 정확한 리뷰 라운드가 필요한 작업,
+- agent prompt나 workflow 설계,
+- 완료 주장이 증거 기반이어야 하는 작업,
+- 오케스트레이션이 필요할 수 있지만 무조건 쓰면 안 되는 작업.
 
-Do not use the full OVV loop for:
+OVV 전체 루프가 과한 작업:
 
-- tiny one-line edits,
-- simple factual answers,
-- tasks where no implementation or verification claim is being made.
+- 아주 작은 한 줄 수정,
+- 단순 사실 답변,
+- 구현이나 검증 주장이 없는 작업.
 
-For small work, use the lightweight path: extract requirements, make the edit, run the narrowest meaningful check, self-review the diff, and report evidence.
+작은 작업에서는 lightweight path를 쓰면 됩니다. 요구사항을 짧게 추출하고, 최소 수정, 가장 좁은 의미 있는 검증, diff self-review, 증거 보고까지만 수행합니다.
 
-## Repository Layout
+## 레포 구조
 
 ```text
 .
@@ -226,6 +226,9 @@ For small work, use the lightweight path: extract requirements, make the edit, r
 ├── README.md
 ├── agents/
 │   └── openai.yaml
+├── examples/
+│   ├── strong-report.md
+│   └── weak-report.md
 ├── references/
 │   ├── eval-fixtures.md
 │   └── feasible-upgrades.md
@@ -235,23 +238,31 @@ For small work, use the lightweight path: extract requirements, make the edit, r
     └── summarize_ovv_learnings.py
 ```
 
-## Development
+## 개발 및 검증
 
-Run syntax checks:
+Python 스크립트 문법 확인:
 
 ```bash
 python -m py_compile scripts/audit_ovv_report.py scripts/record_ovv_learning.py scripts/summarize_ovv_learnings.py
 ```
 
-Run a weak-report audit:
+약한 보고서 audit:
 
 ```bash
 printf "Done. I implemented the UI and reviewed it thoroughly. Tests passed.\n" > weak.md
 python scripts/audit_ovv_report.py weak.md
 ```
 
-The weak report should fail.
+약한 보고서는 실패해야 합니다.
 
-## License
+강한 보고서 audit:
+
+```bash
+python scripts/audit_ovv_report.py examples/strong-report.md
+```
+
+강한 보고서는 통과해야 합니다.
+
+## 라이선스
 
 MIT
